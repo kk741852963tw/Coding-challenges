@@ -3,47 +3,86 @@
  * @return {boolean}
  */
 var isValidSudoku = function(board) {
-  var test = function(array) {
-    var temp = [];
-    for (let i = 0; i < array.length; i++) {
-      if (array[i] === ".") {
-        continue;
+  // var test = function(array) {
+  //     var temp = [];
+  //     for (let i = 0; i < array.length; i++) {
+  //         if (array[i] === ".") {
+  //             continue;
+  //         }
+  //         if (temp.indexOf(array[i]) === -1) {
+  //             temp.push(array[i]);
+  //         } else {
+  //             return false;
+  //         }
+  //     }
+  //     return true;
+  // };
+  // var box = new Array(board.length).fill();
+  // for (let i = 0; i < board.length; i++) {
+  //     if (!test(board[i])) {
+  //         return false;
+  //     }
+  //     var temp = [];
+  //     for (let j = 0; j < board[i].length; j++) {
+  //         var index = 3 * parseInt(i / 3) + parseInt(j / 3);
+  //         if (box[index] === undefined) {
+  //             box[index] = [];
+  //         }
+  //         box[index].push(board[i][j]);
+  //         if (board[j][i] === ".") {
+  //             continue;
+  //         }
+  //         if (temp.indexOf(board[j][i]) === -1) {
+  //             temp.push(board[j][i]);
+  //         } else {
+  //             return false;
+  //         }
+  //     }
+  // }
+  // for (let i = 0; i < board.length; i++) {
+  //     if (!test(box[i])) {
+  //         return false;
+  //     }
+  // }
+  // return true;
+  const rows = {};
+  const cols = {};
+  const squares = {};
+
+  for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+          const num = board[r][c];
+
+          if (num === '.') {
+              continue;
+          }
+
+          const grid = 3 * parseInt(r / 3) + parseInt(c / 3);
+
+          if (!cols[c]) {
+              cols[c] = new Set();
+          }
+          if (!rows[r]) {
+              rows[r] = new Set();
+          }
+          if (!squares[grid]) {
+              squares[grid] = new Set();
+          }
+
+          if (
+              rows[r].has(num) ||
+              cols[c].has(num) ||
+              squares[grid].has(num)
+          ) {
+              return false;
+          }
+
+          cols[c].add(num);
+          rows[r].add(num);
+          squares[grid].add(num);
       }
-      if (temp.indexOf(array[i]) === -1) {
-        temp.push(array[i]);
-      } else {
-        return false;
-      }
-    }
-    return true;
-  };
-  var box = new Array(board.length).fill();
-  for (let i = 0; i < board.length; i++) {
-    if (!test(board[i])) {
-      return false;
-    }
-    var temp = [];
-    for (let j = 0; j < board[i].length; j++) {
-      var index = 3 * parseInt(i / 3) + parseInt(j / 3);
-      if (box[index] === undefined) {
-        box[index] = [];
-      }
-      box[index].push(board[i][j]);
-      if (board[j][i] === ".") {
-        continue;
-      }
-      if (temp.indexOf(board[j][i]) === -1) {
-        temp.push(board[j][i]);
-      } else {
-        return false;
-      }
-    }
   }
-  for (let i = 0; i < board.length; i++) {
-    if (!test(box[i])) {
-      return false;
-    }
-  }
+
   return true;
 };
 
